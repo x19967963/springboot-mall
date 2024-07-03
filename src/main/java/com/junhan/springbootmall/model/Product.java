@@ -1,9 +1,10 @@
 package com.junhan.springbootmall.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.junhan.springbootmall.constant.ProductCategory;
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "product")
@@ -16,7 +17,7 @@ public class Product {
     @Column(name = "product_name")
     private String productName;
 
-    @Enumerated(EnumType.STRING) // 宣告枚舉類型為字串型別
+    @Enumerated(EnumType.STRING)
     @Column(name = "category")
     private ProductCategory category;
 
@@ -32,11 +33,20 @@ public class Product {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "created_date")
-    private Date createdDate;
+    @Column(name = "created_date", nullable = false, updatable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdDate;
 
-    @Column(name = "lastModified_date")
-    private Date lastModifiedDate;
+    @PrePersist
+    protected void onCreate() {
+        createdDate = LocalDateTime.now();
+    }
+
+    @Column(name = "last_modified_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime lastModifiedDate;
+
+    // Getters and Setters
 
     public Integer getProductId() {
         return productId;
@@ -94,19 +104,21 @@ public class Product {
         this.description = description;
     }
 
-    public Date getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedDate(LocalDateTime createdDate) {
+        if (this.createdDate == null) {
+            this.createdDate = createdDate;
+        }
     }
 
-    public Date getLastModifiedDate() {
+    public LocalDateTime getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 }
