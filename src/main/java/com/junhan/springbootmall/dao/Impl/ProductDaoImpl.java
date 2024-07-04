@@ -37,6 +37,7 @@ public class ProductDaoImpl implements ProductDao {
         product.setPrice(productRequest.getPrice());
         product.setStock(productRequest.getStock());
         product.setDescription(productRequest.getDescription());
+        product.setLastModifiedDate(LocalDateTime.now());
         return product;
     }
 
@@ -57,5 +58,10 @@ public class ProductDaoImpl implements ProductDao {
             productRepository.save(product);
         }
 
+    }
+
+    @Override
+    public void deleteProductById(Integer productId) {
+        productRepository.deleteById(productId);
     }
 }

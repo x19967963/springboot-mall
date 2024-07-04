@@ -7,4 +7,5 @@ public interface ProductService {
     public Product getProductById(Integer id);
     public Integer createProduct(ProductRequest productRequest);
     void updateProduct(Integer productId, ProductRequest productRequest);
+    void deleteProductById(Integer productId);
 }
