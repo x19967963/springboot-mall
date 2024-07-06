@@ -8,13 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class ProductDaoImpl implements ProductDao {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Override
+    public List<Product> getProducts() {
+        List<Product> products = new ArrayList<>();
+        productRepository.findAll().forEach(products::add);
+        return products;
+    }
 
     @Override
     public Product getProductById(Integer id) {
@@ -52,8 +61,8 @@ public class ProductDaoImpl implements ProductDao {
         product.setDescription(productRequest.getDescription());
         product.setLastModifiedDate(LocalDateTime.now());  // 使用 LocalDateTime.now() 設置當前日期為最後修改日期
         //判斷目前更新的id是否有在資料庫，確保更新資料庫而非創立
-        Product product1 =  productRepository.findById(productId).orElse(null);
-        if (product1 != null){
+        Product productValid =  productRepository.findById(productId).orElse(null);
+        if (productValid != null){
             product.setProductId(productId);
             productRepository.save(product);
         }
