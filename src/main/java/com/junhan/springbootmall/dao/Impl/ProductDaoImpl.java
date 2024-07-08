@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -20,26 +21,54 @@ public class ProductDaoImpl implements ProductDao {
     ProductRepository productRepository;
 
     @Override
-    public List<Product> getProductsByCategory(ProductCategory category) {
-        return productRepository.findByCategory(category);
+    public List<Product> getProductsByCategoryAndSearch(ProductCategory category, String search, String orderBy, String sort) {
+        List<Product> products = productRepository.findByCategoryAndSearch(category, search);
+        return sortProducts(products, orderBy, sort);
     }
 
     @Override
-    public List<Product> getProductsBySearch(String search) {
-        // 這裡示意，可以根據需要調整實際的查詢方法
-        return productRepository.findBySearch(search);
+    public List<Product> getProductsByCategory(ProductCategory category, String orderBy, String sort) {
+        List<Product> products = productRepository.findByCategory(category);
+        return sortProducts(products, orderBy, sort);
     }
 
     @Override
-    public List<Product> getProductsByCategoryAndSearch(ProductCategory category, String search) {
-        // 這裡示意，可以根據需要調整實際的查詢方法
-        return productRepository.findByCategoryAndSearch(category, search);
+    public List<Product> getProductsBySearch(String search, String orderBy, String sort) {
+        List<Product> products = productRepository.findBySearch(search);
+        return sortProducts(products, orderBy, sort);
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return (List<Product> ) productRepository.findAll();
+    public List<Product> getAllProducts(String orderBy, String sort) {
+        List<Product> products = (List<Product>) productRepository.findAll();
+        return sortProducts(products, orderBy, sort);
     }
+
+    private List<Product> sortProducts(List<Product> products, String orderBy, String sort) {
+        Comparator<Product> comparator;
+
+        switch (orderBy.toLowerCase()) {
+            case "name":
+                comparator = Comparator.comparing(Product::getProductName);
+                break;
+            case "price":
+                comparator = Comparator.comparing(Product::getPrice);
+                break;
+            case "created_date":
+            default:
+                comparator = Comparator.comparing(Product::getCreatedDate);
+                break;
+        }
+
+        if ("desc".equalsIgnoreCase(sort)) {
+            comparator = comparator.reversed();
+        }
+
+        products.sort(comparator);
+        return products;
+    }
+
+
 
     @Override
     public Product getProductById(Integer id) {

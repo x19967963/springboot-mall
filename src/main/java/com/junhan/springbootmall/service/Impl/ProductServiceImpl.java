@@ -16,23 +16,23 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Override
-    public List<Product> getProductsByCategory(ProductCategory category) {
-        return productDao.getProductsByCategory(category);
+    public List<Product> getProductsByCategory(ProductCategory category, String orderBy, String sort) {
+        return productDao.getProductsByCategory(category, orderBy, sort);
     }
 
     @Override
-    public List<Product> getProductsBySearch(String search) {
-        return productDao.getProductsBySearch(search);
+    public List<Product> getProductsBySearch(String search, String orderBy, String sort) {
+        return productDao.getProductsBySearch(search, orderBy, sort);
     }
 
     @Override
-    public List<Product> getProductsByCategoryAndSearch(ProductCategory category, String search) {
-        return productDao.getProductsByCategoryAndSearch(category, search);
+    public List<Product> getProductsByCategoryAndSearch(ProductCategory category, String search,String orderBy, String sort) {
+        return productDao.getProductsByCategoryAndSearch(category, search, orderBy, sort);
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productDao.getAllProducts();
+    public List<Product> getAllProducts(String orderBy, String sort) {
+        return productDao.getAllProducts(orderBy, sort);
     }
 
     @Override

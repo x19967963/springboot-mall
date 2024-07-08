@@ -19,23 +19,29 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(
+            //查詢挑件根據category或自定義search
             @RequestParam(required = false) ProductCategory category,
-            @RequestParam(required = false) String search
+            @RequestParam(required = false) String search,
+            //排序
+            @RequestParam(defaultValue = "created_date") String orderBy,
+            @RequestParam(defaultValue = "desc") String sort
             ){
         List<Product> productList;
         if (category != null && search != null) {
             // 如果都有類別和搜索條件，調用帶有類別和搜索條件的服務方法
-            productList = productService.getProductsByCategoryAndSearch(category, search);
+            productList = productService.getProductsByCategoryAndSearch(category, search, orderBy, sort);
         } else if (category != null) {
             // 如果只有類別，調用僅根據類別查詢的服務方法
-            productList = productService.getProductsByCategory(category);
+            productList = productService.getProductsByCategory(category, orderBy, sort);
         } else if (search != null) {
             // 如果只有搜索條件，調用僅根據搜索條件查詢的服務方法
-            productList = productService.getProductsBySearch(search);
+            productList = productService.getProductsBySearch(search, orderBy, sort);
         } else {
             // 如果都沒有，調用獲取所有產品的服務方法
-            productList = productService.getAllProducts();
+            productList = productService.getAllProducts(orderBy, sort);
         }
+
+
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
 
