@@ -1,5 +1,6 @@
 package com.junhan.springbootmall.Controller;
 
+import com.junhan.springbootmall.constant.ProductCategory;
 import com.junhan.springbootmall.dto.ProductRequest;
 import com.junhan.springbootmall.model.Product;
 import com.junhan.springbootmall.service.ProductService;
@@ -17,8 +18,25 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(){
-        List<Product> productList = productService.getProducts();
+    public ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search
+            ){
+        List<Product> productList;
+        if (category != null && search != null) {
+            // 如果都有類別和搜索條件，調用帶有類別和搜索條件的服務方法
+            productList = productService.getProductsByCategoryAndSearch(category, search);
+        } else if (category != null) {
+            // 如果只有類別，調用僅根據類別查詢的服務方法
+            productList = productService.getProductsByCategory(category);
+        } else if (search != null) {
+            // 如果只有搜索條件，調用僅根據搜索條件查詢的服務方法
+            productList = productService.getProductsBySearch(search);
+        } else {
+            // 如果都沒有，調用獲取所有產品的服務方法
+            productList = productService.getAllProducts();
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(productList);
 
     }

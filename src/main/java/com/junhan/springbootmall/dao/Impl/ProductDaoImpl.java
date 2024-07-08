@@ -1,5 +1,6 @@
 package com.junhan.springbootmall.dao.Impl;
 
+import com.junhan.springbootmall.constant.ProductCategory;
 import com.junhan.springbootmall.dao.ProductDao;
 import com.junhan.springbootmall.dto.ProductRequest;
 import com.junhan.springbootmall.model.Product;
@@ -19,10 +20,25 @@ public class ProductDaoImpl implements ProductDao {
     ProductRepository productRepository;
 
     @Override
-    public List<Product> getProducts() {
-        List<Product> products = new ArrayList<>();
-        productRepository.findAll().forEach(products::add);
-        return products;
+    public List<Product> getProductsByCategory(ProductCategory category) {
+        return productRepository.findByCategory(category);
+    }
+
+    @Override
+    public List<Product> getProductsBySearch(String search) {
+        // 這裡示意，可以根據需要調整實際的查詢方法
+        return productRepository.findBySearch(search);
+    }
+
+    @Override
+    public List<Product> getProductsByCategoryAndSearch(ProductCategory category, String search) {
+        // 這裡示意，可以根據需要調整實際的查詢方法
+        return productRepository.findByCategoryAndSearch(category, search);
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return (List<Product> ) productRepository.findAll();
     }
 
     @Override
