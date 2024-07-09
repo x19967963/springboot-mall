@@ -1,6 +1,7 @@
 package com.junhan.springbootmall.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 

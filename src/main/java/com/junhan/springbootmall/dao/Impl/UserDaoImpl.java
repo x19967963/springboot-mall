@@ -21,6 +21,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        return user;
+    }
+
+    @Override
     public Integer createUser(UserRegisterRequest userRegisterRequest) {
         User user = convertToUser(userRegisterRequest);
         userRepository.save(user);
