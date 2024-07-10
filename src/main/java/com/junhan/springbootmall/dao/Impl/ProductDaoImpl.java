@@ -97,7 +97,8 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public void updateProduct(Integer productId, ProductRequest productRequest) {
-        Product product = new Product();
+        Product product = productRepository.findById(productId).orElseThrow(() ->
+                new IllegalArgumentException("Invalid product ID: " + productId));
         product.setProductName(productRequest.getProductName());
         product.setCategory(productRequest.getCategory());
         product.setImageUrl(productRequest.getImageUrl());
@@ -112,6 +113,15 @@ public class ProductDaoImpl implements ProductDao {
             productRepository.save(product);
         }
 
+    }
+
+    @Override
+    public void updateStock(Integer productId, Integer stock) {
+        Product product = productRepository.findById(productId).orElseThrow(() ->
+                new IllegalArgumentException("Invalid product ID: " + productId));
+        product.setStock(stock);
+        product.setLastModifiedDate(LocalDateTime.now());
+        productRepository.save(product);
     }
 
     @Override
