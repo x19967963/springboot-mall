@@ -5,9 +5,9 @@ Spring Mall Backend is a project focused on creating a robust backend system wit
 ## Features
 Product Management
 - CRUD Operations: Create, Read, Update, and Delete operations for managing products.
-- Search Functionality: Ability to search products using various criteria.
+- Search Functionality: Ability to search products using various criteria.  
 Account Management
-- User Authentication: Users can log in with their email and password.
+- User Authentication: Users can log in with their email and password.  
 Order Management
 - Order Placement: Users can add products to their orders.
 - Order Details: View detailed info
