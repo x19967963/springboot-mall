@@ -4,6 +4,7 @@ import com.junhan.springbootmall.dao.OrderDao;
 import com.junhan.springbootmall.dto.CreateOrderRequest;
 import com.junhan.springbootmall.dto.OrderDTO;
 import com.junhan.springbootmall.dto.OrderItemDTO;
+import com.junhan.springbootmall.dto.OrderQueryParams;
 import com.junhan.springbootmall.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,10 +22,21 @@ public class OrderDaoImpl implements OrderDao {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        Integer total = orderRepository.countOrders(orderQueryParams.getUserId());
+        return total;
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        return orderRepository.getOrdersByUserId(orderQueryParams.getUserId());
+    }
+
     @Override
     public Order getOrderById(Integer orderId) {
-        Order order = orderRepository.findById(orderId).orElse(null);
-        return order;
+        return orderRepository.findById(orderId).orElse(null);
     }
 
     @Override

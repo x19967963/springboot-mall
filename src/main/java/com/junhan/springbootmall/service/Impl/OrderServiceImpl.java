@@ -3,10 +3,7 @@ package com.junhan.springbootmall.service.Impl;
 import com.junhan.springbootmall.dao.OrderDao;
 import com.junhan.springbootmall.dao.ProductDao;
 import com.junhan.springbootmall.dao.UserDao;
-import com.junhan.springbootmall.dto.BuyItem;
-import com.junhan.springbootmall.dto.CreateOrderRequest;
-import com.junhan.springbootmall.dto.OrderDTO;
-import com.junhan.springbootmall.dto.OrderItemDTO;
+import com.junhan.springbootmall.dto.*;
 import com.junhan.springbootmall.model.Order;
 import com.junhan.springbootmall.model.OrderItem;
 import com.junhan.springbootmall.model.Product;
@@ -37,6 +34,34 @@ public class OrderServiceImpl implements OrderService {
 
     private final static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+    @Override
+    public List<OrderDTO> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+        List<OrderDTO> orderDTOList = new ArrayList<>();
+
+        for (Order order : orderList) {
+            OrderDTO orderDTO = convertToDTO(order); // Convert Order to OrderDTO
+            List<OrderItemDTO> orderItemList = orderDao.getOrderItemsByOrderId(order.getOrderId());
+            orderDTO.setOrderItems(orderItemList);
+            orderDTOList.add(orderDTO);
+        }
+        return orderDTOList;
+    }
+
+    private OrderDTO convertToDTO(Order order) {
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setOrderId(order.getOrderId());
+        orderDTO.setUserId(order.getUserId());
+        orderDTO.setTotalAmount(order.getTotalAmount());
+        orderDTO.setCreatedDate(order.getCreatedDate());
+        // Note: orderItems will be set separately after fetching from DAO
+        return orderDTO;
+    }
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
+    }
 
     @Override
     public OrderDTO getOrderById(Integer orderId) {

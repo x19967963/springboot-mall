@@ -20,8 +20,6 @@ public class Order {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-
-
     @PrePersist
     protected void onCreate() {
         createdDate = LocalDateTime.now();
@@ -70,4 +68,15 @@ public class Order {
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
+
+    public Order(){};
+
+    public Order(Integer orderId, Integer userId, LocalDateTime createdDate, LocalDateTime lastModifiedDate, Integer totalAmount) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+        this.totalAmount = totalAmount;
+    }
+
 }
